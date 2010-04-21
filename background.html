@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <script>
+      function onRequest(request, sender, sendResponse) {
+
+	switch(request.action) {
+		case "get_history":
+			chrome.history.search({text:"",maxResults:100000}, function(results) {
+				console.log("Background searched history successfully.");
+				sendResponse({results:results});
+			});
+			
+			
+			break;
+			
+		case "set_options":
+			window.localStorage["options"] = JSON.stringify(request.options);
+			
+			break;
+		
+		case "get_options":
+			if(!localStorage["options"]) {
+				localStorage["options"] = JSON.stringify(new Array());
+			}
+			sendResponse({options:JSON.parse(window.localStorage["options"])});
+			break;
+	}
+
+
+      };
+
+      chrome.extension.onRequest.addListener(onRequest);
+    
+    </script>
+    
+  </head>
+</html>

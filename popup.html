@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script src="tagcloud.js"></script>
+<script>
+
+var data = Array();
+data.storage = Array();
+data.increment = function(key) {
+	if(!this.storage[key]) {
+		this.storage[key] = 1;
+	} else {
+		this.storage[key]++;
+	}
+}
+
+
+function get_history() {
+	chrome.extension.sendRequest({action:"get_history"}, function(response) {
+		var results = response.results;
+		
+		place = document.getElementById("cloud");
+
+		for(i = 0;i<results.length;i++) {
+			//document.write("Visited " + results[i].url + " with id " + results[i].id + ".<br/>");
+			hostSearch = new RegExp("//([^/]+)/");
+			m = results[i].url.match(hostSearch);
+			if(m) {
+				data.increment(m[1]);
+			}
+		}
+		var tagcloud = new TagCloud(place,'descending',false,false,"http://");
+		i = 0;
+		for(host in data.storage) {
+			if(i > 100000) break;
+			tagcloud.addNode(new Node(host,data.storage[host]));
+			//console.log("Added node number " + i++);
+		}
+		tagcloud.draw();
+	});
+}
+
+get_history();
+</script>
+
+
+
+<body>
+<h1>Visitation Tag Cloud</h1>
+<div style="width:600px;height:600px;" id="cloud"></div>
+</body>
+</html>
+
