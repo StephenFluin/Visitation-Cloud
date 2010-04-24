@@ -2,6 +2,7 @@
 <html>
 <head>
 <script src="tagcloud.js"></script>
+<script src="http://code.jquery.com/jquery-latest.js"></script>
 <script>
 
 var data = Array();
@@ -29,7 +30,7 @@ function get_history() {
 				data.increment(m[1]);
 			}
 		}
-		var tagcloud = new TagCloud(place,'descending',false,false,"http://");
+		var tagcloud = new TagCloud(place,'descending',[{r:0,g:132,b:169},{r:200,g:200,b:200},{r:27,g:54,b:100}],false,"http://");
 		i = 0;
 		for(host in data.storage) {
 			if(i > 100000) break;
@@ -40,14 +41,16 @@ function get_history() {
 	});
 }
 
-get_history();
+//get_history();
+
+$("#spydermate").load("http://spydermate.com");
 </script>
 
 
 
 <body>
-<h1>Visitation Tag Cloud</h1>
-<div style="width:600px;height:600px;" id="cloud"></div>
+<!--<div style="width:600px;height:600px;" id="cloud"></div>-->
+<iframe src="http://spydermate.com" href="spydermate.com" id="spydermate" style="width:1000px;height:800px;">Spydermate Box Goes Here</div>
 </body>
 </html>
 
